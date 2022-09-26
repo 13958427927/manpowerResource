@@ -1,4 +1,5 @@
 // 对axios二次封装
+import store from '@/store'
 import axios from 'axios'
 import { Message } from 'element-ui'
 // 创建了一个新的axios实例
@@ -6,6 +7,15 @@ const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // 超时时间
+})
+
+service.interceptors.request.use(config => {
+  if (store.getters.token) {
+    config.headers.Authorization = `Bearer ${store.getters.token}`
+  }
+  return config
+}, error => {
+  Promise.reject(new Error(error))
 })
 
 service.interceptors.response.use(response => {
