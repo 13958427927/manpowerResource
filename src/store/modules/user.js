@@ -13,7 +13,7 @@ export default {
     async loginAction({ commit }, loginData) {
       // 接口
       const data = await login(loginData)
-      console.log(data)
+      // console.log(data)
       commit('SET_TOKEN', data)
     }
   }

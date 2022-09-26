@@ -25,4 +25,4 @@ const requireAll = requireContext => requireContext.keys().map(requireContext) /
 // 映射
 
 requireAll(req)
-console.log(requireAll(req))
+// console.log(requireAll(req))

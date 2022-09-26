@@ -12,7 +12,7 @@ service.interceptors.response.use(response => {
   // 1. 考虑把那些数据跑出去
   // 2. 接口成功 并且 业务成功
   // 3. 没有成功 Promise.reject 抛出错误
-  console.log(response)
+  // console.log(response)
   const { data, message, success } = response.data
   if (success) { // 业务逻辑成功
     return data
