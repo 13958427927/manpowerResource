@@ -76,7 +76,7 @@
     <addRole ref="addRole" :dialog-visible.sync="dialogVisible" @refreshList="getRoleList" />
   </div>
 </template>
-companyAddress
+feature/setting
 <script>
 import { getRoleList, deleteRole, getCompanyInfo } from '@/api/setting'
 import addRole from './components/addRole.vue'
