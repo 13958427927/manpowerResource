@@ -36,6 +36,7 @@ export default {
       const res = await getuserInfo()// result就是用户的基本资料
       const res1 = await getUserDetailById(res.userId)// 为了获取头像
       const result = { ...res, ...res1 }// 将两个接口结果合并
+      console.log(result)
       commit('SET_USER_INFO', result) // 把两个接口的内容存到state里面
       return JSON.parse(JSON.stringify(res)) // 后面会用
     },
