@@ -175,7 +175,7 @@ export default {
     // 2. this.$store.getters.companyId
     // 调用  获取公司接口
       this.companyInfo = await getCompanyInfo(this.companyId)
-      console.log(this.companyInfo)
+      // console.log(this.companyInfo)
     }
 
   }
