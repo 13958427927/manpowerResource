@@ -40,8 +40,7 @@ export default {
     handleCommand(type) {
       if (type === 'add') {
         // 新增
-        console.log('111')
-        this.$emit('addDept')
+        this.$emit('addDept', this.treeNode)
       } else if (type === 'edit') {
         // 编辑
         console.log('22')

@@ -1,13 +1,13 @@
 <template>
   <div class="departments-container">
     <el-card>
-      <treeTools :tree-node="company" :is-root="false" />
+      <treeTools :tree-node="company" :is-root="false" @addDept="handleAddDept" />
     </el-card>
     <el-tree :data="departs" default-expand-all>
       <treeTools slot-scope="{data}" :tree-node="data" @addDept="handleAddDept" />
     </el-tree>
     <!-- 放置新增弹层组件  -->
-    <add-dept :dialog-visible.sync="dialogVisible" />
+    <add-dept :dialog-visible.sync="dialogVisible" :tree-node="currentNode" />
   </div>
 </template>
 :props="defaultProps"
@@ -23,7 +23,8 @@ export default {
     return {
       departs: [],
       company: {},
-      dialogVisible: false // 显示窗体
+      dialogVisible: false, // 显示窗体
+      currentNode: {}
     }
   },
   created() {
@@ -33,10 +34,11 @@ export default {
     async getDepartments() {
       const { depts, companyName, companyManage } = await getDepartments()
       this.departs = tranListToTreeData(depts, '')
-      this.company = { name: companyName, manager: companyManage }
+      this.company = { name: companyName, manager: companyManage, id: '' }
     },
-    handleAddDept() {
+    handleAddDept(node) {
       this.dialogVisible = true
+      this.currentNode = node
     }
   }
 }
