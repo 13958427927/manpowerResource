@@ -23,14 +23,14 @@
     <el-row slot="footer" type="flex" justify="center">
       <!-- 列被分为24 -->
       <el-col :span="6">
-        <el-button type="primary" size="small">确定</el-button>
-        <el-button size="small">取消</el-button>
+        <el-button v-loading="loading" type="primary" size="small" @click="submit">确定</el-button>
+        <el-button size="small" @click="handleClose">取消</el-button>
       </el-col>
     </el-row>
   </el-dialog>
 </template>
 <script>
-import { getDepartments } from '@/api/departments'
+import { getDepartments, addDepartments } from '@/api/departments'
 import { getEmployeeSimple } from '@/api/employees'
 
 export default {
@@ -93,7 +93,8 @@ export default {
           { min: 1, max: 300, message: '部门介绍1-300个字符', trigger: 'blur' }
         ]
       },
-      peoples: []
+      peoples: [],
+      loading: false
     }
   },
   created() {
@@ -103,9 +104,31 @@ export default {
     handleClose() {
       this.$emit('update:dialogVisible', false)
       this.$refs.addDeptForm.resetFields()
+      this.formData = {
+        name: '', // 部门名称
+        code: '', // 部门编码
+        manager: '', // 部门管理者
+        introduce: '' // 部门介绍
+      }
     },
     async getEmployeeSimple() {
       this.peoples = await getEmployeeSimple()
+    },
+    async submit() {
+      try {
+        // 表单校验
+        await this.$refs.addDeptForm.validate()
+        this.loading = true
+        // 让数据添加到指定的id下面
+        await addDepartments({ ...this.formData, pid: this.treeNode.id })
+        this.$message.success('新增成功')
+        this.$parent.getDepartments() // 调用父组件的这个请求数据方法
+        this.handleClose() // 关闭弹出框
+      } catch (e) {
+        console.log(e.message)
+      } finally {
+        this.loading = false
+      }
     }
   }
 }
