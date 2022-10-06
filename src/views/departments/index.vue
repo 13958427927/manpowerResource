@@ -1,13 +1,13 @@
 <template>
-  <div class="departments-container">
+  <div v-loading="loading" class="departments-container">
     <el-card>
       <treeTools :tree-node="company" :is-root="false" @addDept="handleAddDept" />
     </el-card>
     <el-tree :data="departs" default-expand-all>
-      <treeTools slot-scope="{data}" :tree-node="data" @addDept="handleAddDept" />
+      <treeTools slot-scope="{data}" :tree-node="data" @addDept="handleAddDept" @editDept="editDept" @refreshList="getDepartments" />
     </el-tree>
     <!-- 放置新增弹层组件  -->
-    <add-dept :dialog-visible.sync="dialogVisible" :tree-node="currentNode" />
+    <add-dept ref="addDept" :dialog-visible.sync="dialogVisible" :tree-node="currentNode" />
   </div>
 </template>
 :props="defaultProps"
@@ -21,10 +21,11 @@ export default {
   components: { treeTools, addDept },
   data() {
     return {
+      loading: false,
       departs: [],
       company: {},
       dialogVisible: false, // 显示窗体
-      currentNode: {}
+      currentNode: {} // 当前操作的节点
     }
   },
   created() {
@@ -32,13 +33,26 @@ export default {
   },
   methods: {
     async getDepartments() {
-      const { depts, companyName, companyManage } = await getDepartments()
-      this.departs = tranListToTreeData(depts, '')
-      this.company = { name: companyName, manager: companyManage, id: '' }
+      try {
+        this.loading = true
+        const { depts, companyName, companyManage } = await getDepartments()
+        this.departs = tranListToTreeData(depts, '')
+        this.company = { name: companyName, manager: companyManage, id: '' }
+      } finally {
+        this.loading = false
+      }
     },
     handleAddDept(node) {
       this.dialogVisible = true
       this.currentNode = node
+    },
+    editDept(node) {
+      console.log(node)
+      this.currentNode = { ...node }
+      // 回显数据
+      // node 复制 给 addDept formData
+      this.$refs.addDept.formData = { ...node }
+      this.dialogVisible = true
     }
   }
 }
