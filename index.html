@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const arr = [
+            {
+                correctionTime: "2018-11-30",
+                departmentName: "总裁办",
+                formOfEmployment: 1,
+                id: "604f764971f93f3ac8f365c2",
+                mobile: "13800000002",
+                password: "e10adc3949ba59abbe56e057f20f883e",
+                staffPhoto: "http://q6cu3t6jv.bkt.clouddn.com/1063705989926227968?t=1616204161907",
+                timeOfEntry: "2018-11-02",
+                username: "管理员",
+                workNumber: "9002",
+            },
+            {
+                correctionTime: "2018-11-30",
+                departmentName: "总裁办",
+                formOfEmployment: 1,
+                id: "604f764971f93f3ac8f365c2",
+                mobile: "13800000002",
+                password: "e10adc3949ba59abbe56e057f20f883e",
+                staffPhoto: "http://q6cu3t6jv.bkt.clouddn.com/1063705989926227968?t=1616204161907",
+                timeOfEntry: "2018-11-02",
+                username: "管理员",
+                workNumber: "9002",
+            }
+        ]
+
+        // 表头数据
+        // 表内容的数据
+        // [[],[]]
+        // 二维数组内部的数据结构： 每一行的数据，书讯和表头保持一致
+
+        // 表内容的数据和员工列表是i相同的，所以根据员工列表生成
+        const headers = {
+            '姓名': 'username',
+            '手机号': 'mobile',
+            '入职日期': 'timeOfEntry',
+            '聘用形式': 'formOfEmployment',
+            '转正日期': 'correctionTime',
+            '工号': 'workNumber',
+            '部门': 'departmentName'
+        }
+        const header = Object.keys(headers)
+        const data = arr.map(item => {
+            // return []
+            return header.map(key => {
+                // 循环表头是手机号
+                return item[headers[key]]
+            })
+        })
+        console.log(data)
+    </script>
+</body>
+
+</html>

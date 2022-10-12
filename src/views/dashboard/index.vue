@@ -6,13 +6,26 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
 export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
       'name'
     ])
+  },
+  methods: {
+    // handleSuccess(data) {
+    //   console.log('data', data)
+    //   // z做具体业务逻辑
+    // },
+    // beforeUpload(file) {
+    //   console.log(file)
+    //   if (file.size > 1024) {
+    //     this.$message.error('to big')
+    //     return false
+    //   }
+    //   return true
+    // }
   }
 }
 </script>
