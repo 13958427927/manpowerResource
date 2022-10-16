@@ -1,6 +1,13 @@
 <template>
   <div class="user-info">
     <!-- 个人信息 -->
+    <el-row type="flex" justify="end">
+      <el-tooltip content="打印个人基本信息">
+        <router-link :to="`/employees/print/${userId}?type=personal`">
+          <i class="el-icon-printer" />
+        </router-link>
+      </el-tooltip>
+    </el-row>
     <el-form label-width="220px">
       <!-- 工号 入职时间 -->
       <el-row class="inline-info">
@@ -58,6 +65,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
+            <UploaIdmage ref="employeesAvatar" :default-url="employeesAvatar" @on-success="onSuccess" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -88,9 +96,9 @@
         </el-form-item>
         <!-- 个人头像 -->
         <!-- 员工照片 -->
-
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <UploaIdmage ref="employeesAvatar1" :default-url="employeesAvatar1" @on-success="onSuccess1" />
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -457,7 +465,9 @@ export default {
         isThereAnyCompetitionRestriction: '', // 有无竞业限制
         proofOfDepartureOfFormerCompany: '', // 前公司离职证明
         remarks: '' // 备注
-      }
+      },
+      employeesAvatar: '', // 员工头像
+      employeesAvatar1: '' // 员工图片
     }
   },
   created() {
@@ -467,14 +477,27 @@ export default {
   methods: {
     async loadUserInfo() {
       const res = await getUserDetailById(this.userId)
+      // console.log(res)
+      if (res.staffPhoto) {
+        this.employeesAvatar = res.staffPhoto
+        // this.$refs.employeesAvatar.fileList.push({ url: res.staffPhoto })
+      }
+      // console.log(this.employeesAvatar)
       this.userInfo = res
     },
     async loadEmployess() {
       const res = await getEmployeesInfo(this.userId)
+      if (res.staffPhoto) {
+        this.employeesAvatar1 = res.staffPhoto
+        // this.$refs.employeesAvatar.fileList.push({ url: res.staffPhoto })
+      }
       this.formData = res
     },
     async saveEmployeesInfo() {
       try {
+        if (this.$refs.employeesAvatar1.loading) {
+          return this.$message.error('头像正在上传中')
+        }
         await saveEmployeesInfo(this.formData)
         this.$message.success('更新成功')
       } catch (e) {
@@ -483,11 +506,22 @@ export default {
     },
     async saveUserInfo() {
       try {
+        if (this.$refs.employeesAvatar.loading) {
+          return this.$message.error('头像正在上传中')
+        }
         await saveUserDetailById(this.userInfo)
         this.$message.success('保存用户信息成功')
+        this.loadEmployess()
       } catch (e) {
         this.$message.error('保存用户信息失败')
       }
+    },
+    // 监听头像上传
+    onSuccess(val) {
+      this.userInfo.staffPhoto = val.imgUrl
+    },
+    onSuccess1(val) {
+      this.formData.staffPhoto = val.imgUrl
     }
   }
 }

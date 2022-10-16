@@ -22,7 +22,17 @@ export default {
     meta: {
       title: '员工详情' // 标记当前路由规则的中文名称 后续在做左侧菜单时 使用
     }
-  }]
+  },
+  {
+    path: 'print/:id', // 二级默认路由
+    component: () => import('@/views/employees/print'), // 按需加载
+    hidden: true,
+    meta: {
+      title: '打印', // 标记当前路由规则的中文名称 后续在做左侧菜单时 使用
+      icon: 'people'
+    }
+  }
+  ]
 }
 
 // 当你的访问地址 是 /employees的时候 layout组件会显示 此时 你的二级路由的默认组件  也会显示

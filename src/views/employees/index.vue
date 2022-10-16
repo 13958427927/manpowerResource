@@ -15,6 +15,16 @@
     <el-card>
       <el-table v-loading="loading" border :data="list">
         <el-table-column label="序号" sortable="" width="80" type="index" />
+        <el-table-column label="头像">
+          <template slot-scope="{row}">
+            <img
+              style="width: 50px;height: 50px;border-radius: 50px;"
+              :src="row.staffPhoto"
+              alt=""
+              @click="genQrCode"
+            >
+          </template>
+        </el-table-column>
         <el-table-column label="姓名" prop="username" />
         <el-table-column label="工号" prop="workNumber" />
         <el-table-column label="聘用形式" prop="formOfEmployment" :formatter="formatterFn" />
@@ -56,6 +66,13 @@
       </el-row>
     </el-card>
     <addEmployee :dialog-visible.sync="dialogVisible" />
+    <!-- 二维码 -->
+    <el-dialog
+      title="头像二维码"
+      :visible.sync="dialogVisible1"
+    >
+      <canvas ref="canvas" class="center" />
+    </el-dialog>
   </div>
 </template>
 
@@ -65,6 +82,7 @@ import { getEmployeeList, delEmployee } from '@/api/employees'
 import EnumHireType from '@/api/constant/employees'
 import addEmployee from './components/add-employee.vue'
 // console.log(EnumHireType)
+import QrCode from 'qrcode'
 export default {
   name: 'HrsaasIndex',
   components: { addEmployee },
@@ -79,7 +97,8 @@ export default {
       total: 0, // 总数
       loading: false,
       hireType: EnumHireType.hireType,
-      dialogVisible: false
+      dialogVisible: false,
+      dialogVisible1: false
     }
   },
   mounted() {
@@ -158,6 +177,16 @@ export default {
     },
     goDetail(row) {
       this.$router.push(`/employees/detail/${row.id}`)
+    },
+    genQrCode(staffPhoto) {
+      this.dialogVisible1 = true
+      if (!staffPhoto) return this.$message.error('暂无头像')
+      this.$nextTick(() => {
+        QrCode.toCanvas(this.$refs.canvas, 'sample text', function(error) {
+          if (error) console.error(error)
+          console.log('success!')
+        })
+      })
     }
 
   }
@@ -166,5 +195,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+ .aaa {
+  border-radius: 50px;
+  text-align: center;
+ }
 </style>
