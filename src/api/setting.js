@@ -1,5 +1,31 @@
 import request from '@/utils/request'
 
+// 给角色分配权限
+export function assignPerm(data) {
+  return request({
+    url: '/sys/role/assignPrem',
+    method: 'put',
+    data
+  })
+}
+// 根据ID获取角色详情
+export function getRoleDetail(id) {
+  return request({
+    url: `/sys/role/${id}`,
+    method: 'get'
+  })
+}
+/** *
+ * 给用户分配角色
+ * ***/
+export function assignRoles(data) {
+  return request({
+    url: '/sys/user/assignRoles',
+    data,
+    method: 'put'
+  })
+}
+
 /**
  * 获取角色列表
  * ***/

@@ -19,7 +19,7 @@
             <el-table-column align="center" prop="description" label="描述" />
             <el-table-column align="center" label="操作">
               <template slot-scope="{row}">
-                <el-button size="small" type="success">分配权限</el-button>
+                <el-button size="small" type="success" @click="btnPermOK(row.id)">分配权限</el-button>
                 <el-button size="small" type="primary" @click="editRole(row)">编辑</el-button>
                 <el-button size="small" type="danger" @click="delRow(row.id)">删除</el-button>
               </template>
@@ -74,16 +74,17 @@
       </el-tabs>
     </el-card>
     <addRole ref="addRole" :dialog-visible.sync="dialogVisible" @refreshList="getRoleList" />
+    <setPermission :dialog-visible.sync="dialogVisible1" :role-id="roleId" />
   </div>
 </template>
-feature/setting
 <script>
 import { getRoleList, deleteRole, getCompanyInfo } from '@/api/setting'
 import addRole from './components/addRole.vue'
+import setPermission from './components/setPermission.vue'
 import { mapGetters } from 'vuex'
 export default {
   name: 'HrsaasIndex',
-  components: { addRole },
+  components: { addRole, setPermission },
   data() {
     return {
       activeName: 'first',
@@ -96,7 +97,9 @@ export default {
       loading: true,
       total: 0, // 记录总数
       dialogVisible: false,
-      companyInfo: {}
+      dialogVisible1: false,
+      companyInfo: {},
+      roleId: '' // 角色id
     }
   },
   computed: {
@@ -176,6 +179,10 @@ export default {
     // 调用  获取公司接口
       this.companyInfo = await getCompanyInfo(this.companyId)
       // console.log(this.companyInfo)
+    },
+    btnPermOK(id) {
+      this.roleId = id
+      this.dialogVisible1 = true
     }
 
   }

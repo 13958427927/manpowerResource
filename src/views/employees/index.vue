@@ -47,7 +47,7 @@
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
-            <el-button type="text" size="small">角色</el-button>
+            <el-button type="text" size="small" @click="showSetRole(row)">角色</el-button>
             <el-button type="text" size="small" @click="deleteEmployee(row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -73,6 +73,8 @@
     >
       <canvas ref="canvas" class="center" />
     </el-dialog>
+    <!-- 分配角色 -->
+    <AssignRole :dialog-visible.sync="dialogVisible2" :current-id="currentId" />
   </div>
 </template>
 
@@ -81,11 +83,12 @@
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import EnumHireType from '@/api/constant/employees'
 import addEmployee from './components/add-employee.vue'
+import AssignRole from './components/assign-role.vue'
 // console.log(EnumHireType)
 import QrCode from 'qrcode'
 export default {
   name: 'HrsaasIndex',
-  components: { addEmployee },
+  components: { addEmployee, AssignRole },
   // components: { PageTools },
   data() {
     return {
@@ -96,9 +99,11 @@ export default {
       list: [], // 接数据的
       total: 0, // 总数
       loading: false,
-      hireType: EnumHireType.hireType,
-      dialogVisible: false,
-      dialogVisible1: false
+      hireType: EnumHireType.hireType, // 格式化方法
+      dialogVisible: false, // 新增员工
+      dialogVisible1: false, // 二维码弹窗
+      dialogVisible2: false, // 角色弹窗
+      currentId: '' // 角色id
     }
   },
   mounted() {
@@ -106,6 +111,7 @@ export default {
   },
 
   methods: {
+    // 获取员工的综合列表数据
     async getEmployeeList() {
       try {
         this.loading = true
@@ -117,15 +123,18 @@ export default {
         this.loading = false
       }
     },
+    // 数据格式化
     formatterFn(row, column, cellValue) {
       // console.log(row, column, cellValue)
       const res = this.hireType.find(ele => ele.id === cellValue)
       // console.log(res.value)
       return res?.value
     },
+    // 新增员工弹窗
     hanleEmploy() {
       this.dialogVisible = true
     },
+    // 删除员工
     async deleteEmployee(id) {
       try {
         await this.$confirm('您确定删除该员工吗')
@@ -136,6 +145,7 @@ export default {
         console.log(error)
       }
     },
+    // 导出表格
     async exportExcel() {
       const { export_json_to_excel } = await import('@/vendors/Export2Excel')
       const { rows } = await getEmployeeList({
@@ -175,9 +185,11 @@ export default {
         bookType: 'xlsx' // 非必填
       })
     },
+    // 查看详情
     goDetail(row) {
       this.$router.push(`/employees/detail/${row.id}`)
     },
+    // 头像
     genQrCode(staffPhoto) {
       this.dialogVisible1 = true
       if (!staffPhoto) return this.$message.error('暂无头像')
@@ -187,6 +199,11 @@ export default {
           console.log('success!')
         })
       })
+    },
+    // 角色弹窗
+    showSetRole(row) {
+      this.currentId = row.id
+      this.dialogVisible2 = true
     }
 
   }
