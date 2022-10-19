@@ -44,9 +44,9 @@
         <el-table-column label="操作" fixed="right" width="280">
           <template slot-scope="{ row }">
             <el-button type="text" size="small" @click="goDetail(row)">查看</el-button>
-            <el-button type="text" size="small">转正</el-button>
-            <el-button type="text" size="small">调岗</el-button>
-            <el-button type="text" size="small">离职</el-button>
+            <el-button type="text" size="small" :disabled="ishasPermission('role-zuanzheng')">转正</el-button>
+            <el-button type="text" size="small" :disabled="ishasPermission('role-diaoggang')">调岗</el-button>
+            <el-button type="text" size="small" :disabled="ishasPermission('role-lizhi')">离职</el-button>
             <el-button type="text" size="small" @click="showSetRole(row)">角色</el-button>
             <el-button type="text" size="small" @click="deleteEmployee(row.id)">删除</el-button>
           </template>
@@ -86,10 +86,12 @@ import addEmployee from './components/add-employee.vue'
 import AssignRole from './components/assign-role.vue'
 // console.log(EnumHireType)
 import QrCode from 'qrcode'
+import mixBtnPermission from '@/mixins/mixBtnPermission'
 export default {
   name: 'HrsaasIndex',
   components: { addEmployee, AssignRole },
   // components: { PageTools },
+  mixins: [mixBtnPermission],
   data() {
     return {
       page: {

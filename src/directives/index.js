@@ -1,3 +1,4 @@
+import store from '@/store'
 export const imgerror = {
   // 指令对象 会在当前的dom元素插入到节点之后执行
   inserted(el, binding, vnode) {
@@ -17,3 +18,18 @@ export const imgerror = {
   }
 }
 
+export const isHas = {
+  inserted(el, binding) {
+    // el 表示当前指令作用的dom对象
+    console.log(el)
+    // binding 指令中的变量的解释  其中有一个属性叫做 value
+    console.log(binding)
+    const isHas = store.state.user.userInfo.roles.points.includes(binding.value)
+    if (isHas) return
+    el.remove()
+  },
+  // 指令和元素绑定
+  bind() {
+    // 操作样式的dome有了 也和指令绑定了 但是没有插入
+  }
+}

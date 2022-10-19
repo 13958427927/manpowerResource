@@ -8,6 +8,5 @@ const getters = {
   staffPhoto: state => state.user.userInfo.staffPhoto,
   hrsaasTime: state => state.user.hrsaasTime, // 时间
   companyId: state => state.user.userInfo.companyId // 建立对于user模块的companyId的快捷访问
-
 }
 export default getters

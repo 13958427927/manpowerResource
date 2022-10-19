@@ -4,7 +4,6 @@
       <el-tabs v-model="activeName">
         <el-tab-pane label="角色管理" name="first">
           <!-- 新增角色按钮 -->
-          <!-- v-isHas="''" -->
           <el-row style="height:60px" :futter="10">
             <el-button
               :disabled="ishasPermission('role-add')"
@@ -22,8 +21,8 @@
             <el-table-column align="center" label="操作">
               <template slot-scope="{row}">
                 <el-button size="small" type="success" @click="btnPermOK(row.id)">分配权限</el-button>
-                <el-button v-isHas="'role-edit'" size="small" type="primary" @click="editRole(row)">编辑</el-button>
-                <el-button v-isHas="'role-delet'" size="small" type="danger" @click="delRow(row.id)">删除</el-button>
+                <el-button :disabled="ishasPermission('role-edit')" size="small" type="primary" @click="editRole(row)">编辑</el-button>
+                <el-button :disabled="ishasPermission('role-delete')" size="small" type="danger" @click="delRow(row.id)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>

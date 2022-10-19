@@ -1,5 +1,6 @@
 import { login } from '@/api/login'
 import { getuserInfo, getUserDetailById } from '@/api/user'
+import { resetRouter } from '@/router'
 export default {
   namespaced: true,
   state: {
@@ -33,17 +34,22 @@ export default {
       commit('SET_HRSAA_TIME', new Date().getTime())
     },
     async getUserInfo({ commit }) {
-      const res = await getuserInfo()// result就是用户的基本资料
+      const res = await getuserInfo()// result就是用户的基本资料 里面是权限
+      // console.log(res)
+      const points = ['role-add', 'role-assign']
+      res.roles.points = points
       const res1 = await getUserDetailById(res.userId)// 为了获取头像
       const result = { ...res, ...res1 }// 将两个接口结果合并
       // console.log(result)
       commit('SET_USER_INFO', result) // 把两个接口的内容存到state里面
-      return JSON.parse(JSON.stringify(res)) // 后面会用
+      // return JSON.parse(JSON.stringify(res)) // 后面会用
+      return res.roles
     },
     logout({ commit }) {
       // 清除用户数据  token
       commit('RMOVE_USER_INFO')
       commit('RMOVE_TOKEN')
+      resetRouter()
     }
   }
 }

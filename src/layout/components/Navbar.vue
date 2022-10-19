@@ -1,14 +1,13 @@
 <template>
   <div class="navbar">
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
     <!-- <breadcrumb class="breadcrumb-container" /> -->
     <div class="app-breadcrumb">
       张氏娱乐传媒科技有限公司
       <span class="breadBtn">董事长</span>
     </div>
-
     <div class="right-menu">
+      <full-screen style="margin:auto 8px;" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img
@@ -39,10 +38,12 @@ import { mapGetters } from 'vuex'
 // import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import defaultImg from '@/assets/common/bigUserHeader.png'
+import FullScreen from '@/FullScreen/index.vue'
 export default {
   components: {
     // Breadcrumb,
-    Hamburger
+    Hamburger,
+    FullScreen
   },
   data() {
     return {
@@ -101,6 +102,7 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
+    display: flex;
 
     &:focus {
       outline: none;

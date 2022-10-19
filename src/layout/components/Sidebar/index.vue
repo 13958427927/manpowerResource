@@ -31,7 +31,10 @@ export default {
       'sidebar'
     ]),
     routes() {
-      return this.$router.options.routes
+      // this.$router.options.routes 获取路由规则表
+      // 没有办法获取到动态添加的路由的规则
+      // return this.$router.options.routes
+      return this.$store.state.permission.routes
     },
     activeMenu() {
       const route = this.$route
